@@ -1,0 +1,9 @@
+Package: com.nito.adh4x
+Name: AdH4x
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: Kevin Bradley
+Author: Kevin Bradley
+Section: Tweaks
