@@ -16,7 +16,22 @@
 - (UIView *)_h4xFindFirstSubviewWithClass:(Class)theClass;
 @end
 
+%hook GADRewardedAd
+- (BOOL)canPresentFromRootViewController:(UIViewController *)rootViewController
+                                   error:(NSError **)error {
+	%log;
+	return false;
+}
+%end
+
 %hook GADInternalBannerView
+- (void)loadRequest:(id)request {
+	%log;
+}
+
+- (BOOL)isAutoloadEnabled {
+	return false;
+}
 
 - (BOOL)userInteractionEnabled {
 	return false;
@@ -32,7 +47,28 @@
 %end
 
 %hook GAMBannerView
+- (BOOL)isAutoloadEnabled {
+	return false;
+}
+- (BOOL)userInteractionEnabled {
+	return false;
+}
 
+- (BOOL)hidden {
+	return true;
+}
+
+- (CGFloat)alpha {
+	return 0;
+}
+
+- (void)loadRequest:(id)request {
+	%log;
+}
+
+%end
+
+%hook GADWebAdView
 - (BOOL)userInteractionEnabled {
 	return false;
 }
@@ -46,7 +82,23 @@
 }
 %end
 
+%hook GADInterstitialAd
+- (BOOL)canPresentFromRootViewController:(UIViewController *)rootViewController
+                                   error:(NSError **)error {
+	%log;
+	return false;
+}
+%end
+
 %hook GADBannerView
+
+- (void)loadRequest:(id)request {
+	%log;
+}
+
+- (BOOL)isAutoloadEnabled {
+	return false;
+}
 
 - (BOOL)userInteractionEnabled {
 	return false;
@@ -60,6 +112,20 @@
 	return 0;
 }
 
+%end
+
+%hook ADLAdContentView
+- (BOOL)userInteractionEnabled {
+	return false;
+}
+
+- (BOOL)hidden {
+	return true;
+}
+
+- (CGFloat)alpha {
+	return 0;
+}
 %end
 
 %hook UIViewController
@@ -67,7 +133,7 @@
 %new
 - (void)killGoogleAdGarbage {
     //%log;
-    NSArray *verboten = @[@"GADBannerView", @"GADInternalBannerView", @"GAMBannerView"];
+    NSArray *verboten = @[@"ADLAdContentView", @"GADBannerView", @"GADInternalBannerView", @"GAMBannerView", @"GADWebAdView"];
     [verboten enumerateObjectsUsingBlock:^(id _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
 	Class current = NSClassFromString(obj);
 	UIView *found = [[self view] _h4xFindFirstSubviewWithClass:current];
